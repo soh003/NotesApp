@@ -6,14 +6,15 @@ const app = Vue.createApp({
             intro:'AppNote',
             notes: [],
             newNote: {
-                Title: '',
-                Content: '',
-                id:null,
-                
+                title: '',
+                content: '',
+                id:null,                
                 
             },
             error:null,
-            editingNote: null // Bruges til at holde styr på, hvilken note der redigeres
+            editingNote: null, // Bruges til at holde styr på, hvilken note der redigeres
+            noteIdToFetch: '', // Til at gemme brugerens input til Note ID
+            foundNote: null,
         }
     }, 
     methods: {
@@ -31,6 +32,20 @@ const app = Vue.createApp({
             )          
             
                            
+        },
+        getNoteById(noteId) {
+            
+            axios.get(`http://localhost:5221/api/notes/${noteId}`)
+            .then(response => {
+                // Hvis noten findes, vises den (f.eks. i en modal eller et separat område)
+                this.foundNote = response.data;
+                
+            })
+            .catch(error => {
+                console.error(error);
+                this.error = error.message;
+                this.foundNote = null; // Ryd hvis der ikke findes en note
+            });
         },
         opretNote() {
             axios.post('http://localhost:5221/api/notes', this.newNote)
@@ -64,29 +79,8 @@ const app = Vue.createApp({
             
         },
 
-        editNote(note) {
-            this.editingNote = { ...note }; // Opret en kopi af noten til redigering
-        },
-
-        updateNote(){
-            if (this.editingNote) {
-                axios.put(`http://localhost:5221/api/notes/${this.editingNote.id}`, this.editingNote)
-                    .then(response => {
-                        // Find indekset for den opdaterede note
-                        const index = this.notes.findIndex(note => note.id === this.editingNote.id);
-                        if (index !== -1) {
-                            this.notes[index] = response.data; // Opdater noten i arrayet
-                        }
-                        this.editingNote=null; // Afslut redigeringstilstand
-                    })
-                    .catch(error => {
-                        this.error = error.message;
-                    });
-                }
-        },
-        cancelEdit(){
-            this.editingNote=null; //Annuller redigering
-        },
+        
+        
         clearForm(){
             // Ryd formularen efter opdatering
             this.newNote.id = '';

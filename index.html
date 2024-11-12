@@ -15,34 +15,55 @@
         
     
         <h1>{{intro}}</h1>
+        <div class="container">
 
-        <!--Opret note-->
-        <form v-on:submit.prevent="opretNote">
-            <input type="number" v-model="newNote.id" placeholder="ID" required />
-            <div></div>
-            <input type="text" v-model="newNote.title" placeholder="Title" required/>
-            <div></div>
-            <textarea v-model="newNote.content" placeholder="Content" required></textarea>
-            <div></div>
-            <button type="submit">Create Note</button>
-        </form>
+            <!--Opret note-->
+            <form v-on:submit.prevent="opretNote">
+                <input type="number" v-model="newNote.id" placeholder="ID" required />
+                <div></div>
+                <input type="text" v-model="newNote.title" placeholder="Title" required/>
+                <div></div>
+                <textarea v-model="newNote.content" placeholder="Content" required></textarea>
+                <div></div>
+                <button type="submit">Create Note</button>
+            </form>
 
-        <button v-on:click="getAll">Hent Noter</button>
+            
+        </div>
+        
+
+        <button v-on:click="getAll">Hent Alle Noter</button>
 
         <!--Liste til noter-->
         <ul v-if="notes.length > 0">
             <li v-for="note in notes" :key="note.id">
-                    <div v-else>
+                 <div v-else>
                     <h2>{{ note.title }}</h2>
                     <h3>ID: {{ note.id }}</h3>
                     <p>{{ note.content }}</p>
                     <button v-on:click="deleteNote(note.id)">Slet</button>
-                    
-                </div>
-                
+                </div>                
             </li>
         </ul>
 
+        <!--Hent note ud fra id-->
+        <div>
+
+            <input type="number" v-model="noteIdToFetch" placeholder="Indtast Note ID"/>
+            <button v-on:click="getNoteById(noteIdToFetch)">Hent en Note</button>
+        </div>
+        <div v-if="foundNote">
+            <h3>Fundet Note:</h3>
+            <p><strong>Id:</strong> {{foundNote.id}} </p>
+            <p><strong>Titel:</strong> {{ foundNote.title }}</p>
+            <p><strong>Indhold:</strong> {{ foundNote.content }}</p>
+        </div>
+
+
+        
+
+
+        
     </div>
 
 
