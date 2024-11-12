@@ -32,19 +32,12 @@
         <!--Liste til noter-->
         <ul v-if="notes.length > 0">
             <li v-for="note in notes" :key="note.id">
-                <div v-if="editingNote && editingNote.id === note.id">
-                    <!--Redigeringstilstand-->
-                    <input v-model="editingNote.title" placeholder="Rediger titel" />
-                    <textarea v-model="editingNote.content" placeholder="Rediger indhold"></textarea>
-                    <button v-on:click="updateNote">Gem</button>
-                    <button v-on:click="cancelEdit">Annuller</button>
-                </div>
-                <div v-else>
+                    <div v-else>
                     <h2>{{ note.title }}</h2>
                     <h3>ID: {{ note.id }}</h3>
                     <p>{{ note.content }}</p>
                     <button v-on:click="deleteNote(note.id)">Slet</button>
-                    <button v-on:click="editNote(note)">Rediger</button>
+                    
                 </div>
                 
             </li>
